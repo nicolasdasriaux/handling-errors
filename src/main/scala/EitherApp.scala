@@ -12,11 +12,10 @@ object EitherApp {
     val leftEither: Either[String, Nothing] = Either.left("Error")
 
     def parseInt(s: String): Either[InvalidIntString, Int] =
-      if (s.startsWith("-") && s.drop(1).forall(_.isDigit) || s.forall(_.isDigit))
+      if (s.matches("""-?\d+"""))
         Either.right(s.toInt)
       else
         Either.left(InvalidIntString(s))
-
 
     def positiveInt(n: Int): Either[NegativeInt, Int] =
       Either.cond(

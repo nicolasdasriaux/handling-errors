@@ -1,6 +1,6 @@
-import cats.implicits._
+import cats.syntax.option._
 
-class OptionApp {
+object OptionApp {
   def main(args: Array[String]): Unit = {
     3.some
   }

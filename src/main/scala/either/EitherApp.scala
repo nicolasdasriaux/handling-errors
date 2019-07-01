@@ -20,6 +20,11 @@ object EitherApp {
       d <- inverse(number)
     } yield (number, d)
 
+    def toInt(s: String): Either[Throwable, Int] = Either.catchNonfatal(s.toInt)
     println(sum)
+
+    println(toInt("BOOM"))
+    val value: Either[NumberFormatException, Int] = Either.catchOnly[NumberFormatException]("BOOM".toInt)
+    println(value)
   }
 }
