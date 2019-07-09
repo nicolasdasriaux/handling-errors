@@ -1,3 +1,3 @@
-package reader
+package service
 
 case class ItemServiceConfig(namePrefix: String)

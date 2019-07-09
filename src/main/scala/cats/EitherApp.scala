@@ -1,4 +1,6 @@
-import cats.syntax.either._
+package cats
+
+import cats.implicits._
 
 object EitherApp {
   case class InvalidIntString(s: String)
