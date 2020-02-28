@@ -5,8 +5,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>handlingerrors</groupId>
-    <artifactId>handling-errors-java</artifactId>
+    <groupId>pureerror</groupId>
+    <artifactId>java-pure-error</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

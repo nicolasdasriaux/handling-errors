@@ -2,8 +2,9 @@ addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 lazy val root = (project in file("."))
   .settings(
-    name := "handling-errors",
-    version := "0.1",
+    organization := "pureerror",
+    name := "scala-pure-error",
+    version := "1.0-SNAPSHOT",
     scalaVersion := "2.12.8",
 
     scalacOptions += "-Ypartial-unification",
