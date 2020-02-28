@@ -67,15 +67,15 @@ public class EitherExamples {
             });
 
             example("Form validation", () -> {
-                final Either<String, Item> success = Item.fromForm(ImmutableItemForm.builder().id(" 1 ").name("  Ball  ").build());
+                final Either<String, Item> success = ItemForm.validate(ImmutableItemForm.builder().id(" 1 ").name("  Ball  ").build());
                 System.out.println("success = " + success);
-                final Either<String, Item> failure1 = Item.fromForm(ImmutableItemForm.builder().id(" a ").name("  Ball  ").build());
+                final Either<String, Item> failure1 = ItemForm.validate(ImmutableItemForm.builder().id("   ").name("  Ball  ").build());
                 System.out.println("failure1 = " + failure1);
-                final Either<String, Item> failure2 = Item.fromForm(ImmutableItemForm.builder().id(" -1 ").name("  Ball  ").build());
+                final Either<String, Item> failure2 = ItemForm.validate(ImmutableItemForm.builder().id(" a ").name("  Ball  ").build());
                 System.out.println("failure2 = " + failure2);
-                final Either<String, Item> failure3 = Item.fromForm(ImmutableItemForm.builder().id(" 1 ").name("   ").build());
+                final Either<String, Item> failure3 = ItemForm.validate(ImmutableItemForm.builder().id(" -1 ").name("  Ball  ").build());
                 System.out.println("failure3 = " + failure3);
-                final Either<String, Item> failure4 = Item.fromForm(ImmutableItemForm.builder().id("   ").name(" Ball ").build());
+                final Either<String, Item> failure4 = ItemForm.validate(ImmutableItemForm.builder().id(" 1 ").name("   ").build());
                 System.out.println("failure4 = " + failure4);
             });
         });

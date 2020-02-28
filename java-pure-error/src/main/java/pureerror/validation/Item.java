@@ -1,4 +1,4 @@
-package pureerror.either;
+package pureerror.validation;
 
 import com.google.common.base.Preconditions;
 import org.immutables.value.Value;
