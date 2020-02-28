@@ -67,15 +67,15 @@ public class EitherExamples {
             });
 
             example("Form validation", () -> {
-                final Either<String, Item> success = ItemForm.validate(ImmutableItemForm.builder().id(" 1 ").name("  Ball  ").build());
+                final Either<String, Item> success = ItemForm.validate(ItemForm.of(" 1 ", "  Ball  "));
                 System.out.println("success = " + success);
-                final Either<String, Item> failure1 = ItemForm.validate(ImmutableItemForm.builder().id("   ").name("  Ball  ").build());
+                final Either<String, Item> failure1 = ItemForm.validate(ItemForm.of("   ","  Ball  "));
                 System.out.println("failure1 = " + failure1);
-                final Either<String, Item> failure2 = ItemForm.validate(ImmutableItemForm.builder().id(" a ").name("  Ball  ").build());
+                final Either<String, Item> failure2 = ItemForm.validate(ItemForm.of(" a ", "  Ball  "));
                 System.out.println("failure2 = " + failure2);
-                final Either<String, Item> failure3 = ItemForm.validate(ImmutableItemForm.builder().id(" -1 ").name("  Ball  ").build());
+                final Either<String, Item> failure3 = ItemForm.validate(ItemForm.of(" -1 ", "  Ball  "));
                 System.out.println("failure3 = " + failure3);
-                final Either<String, Item> failure4 = ItemForm.validate(ImmutableItemForm.builder().id(" 1 ").name("   ").build());
+                final Either<String, Item> failure4 = ItemForm.validate(ItemForm.of(" 1 ", "   "));
                 System.out.println("failure4 = " + failure4);
             });
         });

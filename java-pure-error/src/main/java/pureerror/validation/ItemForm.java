@@ -16,8 +16,10 @@ public interface ItemForm {
     static Validation<Seq<String>, Item> validate(final ItemForm itemForm) {
         return Validation
                 .combine(
-                        validatePositiveIntString(itemForm.id()).mapError(e -> "id: " + e),
-                        validateString(itemForm.name()).mapError(e -> "name: " + e)
+                        validatePositiveIntString(itemForm.id())
+                                .mapError(e -> "id: " + e),
+                        validateString(itemForm.name())
+                                .mapError(e -> "name: " + e)
                 )
                 .ap((id, name) -> Item.of(id, name));
     }
