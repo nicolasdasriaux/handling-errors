@@ -17,9 +17,9 @@ object ValidatedCustomer {
 
   def validateCustomer(id: Int, firstName: String, lastName: String): ValidatedNel[String, Customer] = {
     (
-      validatePositiveInt(id).toValidatedNel[String].leftMap(_.map(s => s"id: $s")),
-      validateTrimmedAndNonEmpty(firstName).toValidatedNel[String].leftMap(_.map(s => s"firstName: $s")),
-      validateTrimmedAndNonEmpty(lastName).toValidatedNel[String].leftMap(_.map(s => s"lastName: $s"))
+      validatePositiveInt(id).toValidatedNel[String].leftMap(_.map(error => s"id: $error")),
+      validateTrimmedAndNonEmpty(firstName).toValidatedNel[String].leftMap(_.map(error => s"firstName: $error")),
+      validateTrimmedAndNonEmpty(lastName).toValidatedNel[String].leftMap(_.map(error => s"lastName: $error"))
     ).mapN(Customer.apply)
   }
 }

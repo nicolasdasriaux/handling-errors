@@ -1,14 +1,14 @@
 package io.zio
 
-import java.util.concurrent.{Executors, ScheduledFuture, TimeUnit}
+import java.util.concurrent.Executors
 
-import zio.{App, Canceler, IO, Queue, Schedule, UIO, ZIO}
 import zio.console._
 import zio.duration._
 import zio.stream._
+import zio._
 
 object ZioApp extends App {
-  override def run(args: List[String]): ZIO[Environment, Nothing, Int] = {
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
     for {
       _ <- putStrLn("What's your name?")
       name <- getStrLn
@@ -17,7 +17,7 @@ object ZioApp extends App {
 
     object Tick
 
-    val ticks = Stream.repeatEffectWith(IO.succeed(Tick), Schedule.spaced(1.second))
+    val ticks = ZStream.repeatEffectWith(IO.succeed(Tick), Schedule.spaced(1.second))
     val numbers = Stream.fromIterable(1 to 10)
 
     val tickedNumbers = ticks.zip(numbers).map(_._2)
@@ -26,7 +26,7 @@ object ZioApp extends App {
       .map(i => i * i)
       .takeWhile(_ < 80)
       .tap(i => putStrLn(s"... $i"))
-      .foldLeft(0)(_ + _)
+      .fold(0)(_ + _)
 
     val value = tickedNumbers.transduce(ZSink.foldUntil[Int, Int](0, 3)(_ + _))
     val value1 = value.foreach(l => putStrLn(l.toString))
@@ -37,7 +37,7 @@ object ZioApp extends App {
       _ <- queue.offer(10).fork
       n <- queue.take
       _ <- putStrLn(s"n=$n")
-      _ <- sum.use(s => putStrLn(s"s=$s"))
+      _ <- sum.map(s => putStrLn(s"s=$s"))
       _ <- value1
     } yield ()
 
@@ -61,26 +61,6 @@ object ZioApp extends App {
     } yield s
 
     val executor = Executors.newScheduledThreadPool(5)
-
-    val test = Stream.effectAsyncInterrupt[String, Int] { notify =>
-      var i = 0
-
-      var task: ScheduledFuture[_] = executor.scheduleAtFixedRate(
-        {
-          () =>
-            i += 1
-            if (i <= 5) notify(IO.succeed(i)) else task.cancel(false)
-        },
-        3, 1, TimeUnit.SECONDS
-      )
-
-      Left(UIO.effectTotal(task.cancel(false)))
-    }
-
-    val prog2 = for {
-      lq <- test.foreach(i => putStrLn(i.toString)).race(UIO.unit.delay(5.seconds))
-    } yield ()
-
-    prog2.fold(_ => 1, _ => 0)
+    ???
   }
 }

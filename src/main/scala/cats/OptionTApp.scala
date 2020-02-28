@@ -10,6 +10,6 @@ object OptionTApp {
     val t3 = OptionT.fromOption[Either[String, ?]](Some(5))
 
     val value = t3.map(_ * 10)
-    println(value)
+    println(value.value)
   }
 }

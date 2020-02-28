@@ -4,6 +4,7 @@ import cats.implicits._
 
 object OptionApp {
   def main(args: Array[String]): Unit = {
-    3.some
+    val someInt = 3.some
+    val noneInt = none[Int]
   }
 }
