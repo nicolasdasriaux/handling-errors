@@ -18,7 +18,7 @@
         <vavr.version>0.10.2</vavr.version>
         <immutables.vavr.version>0.6.0</immutables.vavr.version>
         <guava.version>28.1-jre</guava.version>
-        <jackson.version>2.9.10</jackson.version>
+        <jackson.version>2.9.10.4</jackson.version>
         <vavr.jackson.version>0.10.2</vavr.jackson.version>
 
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
