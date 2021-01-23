@@ -8,7 +8,7 @@ import zio.stream._
 import zio._
 
 object ZioApp extends App {
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
     for {
       _ <- putStrLn("What's your name?")
       name <- getStrLn
@@ -28,7 +28,7 @@ object ZioApp extends App {
       .tap(i => putStrLn(s"... $i"))
       .fold(0)(_ + _)
 
-    val value = tickedNumbers.transduce(ZSink.foldUntil[Int, Int](0, 3)(_ + _))
+    val value = tickedNumbers.transduce(ZTransducer.foldUntil[Int, Int](0, 3)(_ + _))
     val value1 = value.foreach(l => putStrLn(l.toString))
 
     val program = for {
@@ -47,7 +47,7 @@ object ZioApp extends App {
       ls = Stream.fromQueue(l)
       rs = Stream.fromQueue(r)
 
-      zip = ls.zipWith(rs) {
+      zip = ls.map(Option(_)).zipAllWith(rs.map(Option(_)))(_ => Option.empty[String], _ => Option.empty[String]) {
         case (Some(a), Some(b)) => Some(s"($a, $b)")
         case (Some(a), None) => Some(s"($a, _)")
         case (None, Some(b)) => Some(s"(_, $b)")

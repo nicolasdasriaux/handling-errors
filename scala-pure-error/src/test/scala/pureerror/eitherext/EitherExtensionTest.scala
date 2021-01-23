@@ -41,12 +41,12 @@ class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
 
     describe("attempt") {
       it("success") {
-        val either = Either.attempt("1".toInt)
+        val either = Either("1".toInt)
         either.right.value should be(1)
       }
 
       it("failure") {
-        val either = Either.attempt("abc".toInt)
+        val either = Either("abc".toInt)
         either.left.value should be(a[NumberFormatException])
         either.left.value should have message """For input string: "abc""""
       }
@@ -69,7 +69,7 @@ class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
 
     describe("orDieWith") {
       it("success") {
-        val either = (Either.succeed(1): Either[String, Int])
+        val either = Either.succeed(1): Either[String, Int]
         either.orDieWith(new NumberFormatException(_)).right.value should be(1)
       }
 
@@ -83,10 +83,10 @@ class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
     }
 
     it("orElse") {
-      val value1 = Either.attempt("abc".toInt)
+      val value1 = Either("abc".toInt)
       value1.left.value should be (a[NumberFormatException])
       value1.left.value should have message("""For input string: "abc"""")
-      val value2 = Either.attempt("abc".toInt).refineToOrDie[NumberFormatException]
+      val value2 = Either("abc".toInt).refineToOrDie[NumberFormatException]
       value2.mapError(_.getMessage) should be(Left("""For input string: "abc"""".stripMargin))
     }
   }
