@@ -5,7 +5,7 @@ import cats.implicits._
 
 object WriterTApp {
   def main(args: Array[String]): Unit = {
-    def pure(v: Boolean): WriterT[Option, List[String], Boolean] = v.pure[WriterT[Option, List[String], ?]]
+    def pure(v: Boolean): WriterT[Option, List[String], Boolean] = v.pure[WriterT[Option, List[String], *]]
     def apply(v: Option[(List[String], Double)]): WriterT[Option, List[String], Double] = WriterT(v)
     def liftF(v: Option[Double]): WriterT[Option, List[String], Double] = WriterT.liftF(v)
 

@@ -1,7 +1,9 @@
-package pureeffect.reader
+package pureeffect.effect.reader
 
-case class Reader[-R, +A](_run: R => A) { pa =>
-  def map[B](f: A => B): Reader[R, B] = Reader.access { r =>
+case class Reader[-R, +A] private (private val _run: R => A) { pa =>
+  def run(r: R): A = _run(r)
+
+  def map[B](f: A => B): Reader[R, B] = Reader { r =>
     val a: A = pa.run(r)
     val b: B = f(a)
     b
@@ -26,12 +28,11 @@ case class Reader[-R, +A](_run: R => A) { pa =>
   def provide(r: R): Reader[Any, A] = Reader { _ =>
     pa.run(r)
   }
-
-  def run(r: R): A = _run(r)
 }
 
 object Reader {
-  def success[A](a: A): Reader[Any, A] = Reader(_ => a)
-  def environment[R]: Reader[R, R] = Reader(r => r)
-  def access[R, A](_run: R => A): Reader[R, A] = Reader(_run)
+  def access[R, A](run: R => A): Reader[R, A] = Reader(run)
+
+  def success[A](a: A): Reader[Any, A] = access(_ => a)
+  def environment[R]: Reader[R, R] = access(r => r)
 }

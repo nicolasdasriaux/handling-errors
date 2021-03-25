@@ -1,7 +1,6 @@
-package pureeffect.io
+package pureeffect.effect.io
 
 import scala.io.StdIn
-
 
 object console {
   val getStrLn: IO[String] = IO.effectTotal(StdIn.readLine())

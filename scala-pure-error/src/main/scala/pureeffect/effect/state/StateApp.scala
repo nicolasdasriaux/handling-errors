@@ -1,4 +1,4 @@
-package pureeffect.state
+package pureeffect.effect.state
 
 object StateApp {
   val incId: State[Int, Unit] = State.modify[Int](_ + 1)

@@ -1,6 +1,10 @@
-package pureeffect.io
+package pureeffect.effect.io
 
-case class IO[+A](_unsafeRun: () => A) { pa =>
+import pureeffect.effect.either.Either
+
+case class IO[+A] private (private val _unsafeRun: () => A) { pa =>
+  def unsafeRun(): A = _unsafeRun()
+
   def map[B](f: A => B): IO[B] = IO { () =>
     val a: A = pa.unsafeRun()
     val b: B = f(a)
@@ -14,7 +18,12 @@ case class IO[+A](_unsafeRun: () => A) { pa =>
     b
   }
 
-  def unsafeRun(): A = _unsafeRun()
+  def attempt: IO[Either[Throwable, A]] = IO { () =>
+    try Either.succeed(pa.unsafeRun())
+    catch {
+      case ex: Throwable => Either.fail(ex)
+    }
+  }
 }
 
 object IO {
