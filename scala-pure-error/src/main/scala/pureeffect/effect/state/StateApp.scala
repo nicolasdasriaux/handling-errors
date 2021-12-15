@@ -18,7 +18,7 @@ object StateApp {
     } yield List(name1, name2, name3)
 
   def main(args: Array[String]): Unit = {
-    val stateAndNames = program.run(1)
+    val stateAndNames: (Int, List[String]) = program.run(1)
     println(stateAndNames)
   }
 }

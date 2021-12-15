@@ -30,28 +30,28 @@ case class ItemServiceConfig(namePrefix: String)
 case class GlobalConfig(customerServiceConfig: CustomerServiceConfig, itemServiceConfig: ItemServiceConfig)
 
 object ReaderApp {
-  def main(args: Array[String]): Unit = {
-    val globalConfig = GlobalConfig(
-      customerServiceConfig = CustomerServiceConfig(
-        firstNamePrefix = "First Name",
-        lastNamePrefix = "Last Name"
-      ),
-      itemServiceConfig = ItemServiceConfig(
-        namePrefix = "Name"
-      )
+  val globalConfig = GlobalConfig(
+    customerServiceConfig = CustomerServiceConfig(
+      firstNamePrefix = "First Name",
+      lastNamePrefix = "Last Name"
+    ),
+    itemServiceConfig = ItemServiceConfig(
+      namePrefix = "Name"
     )
+  )
 
-    val buildCustomerService: Reader[CustomerServiceConfig, CustomerService] = Reader.access(CustomerService.fromConfig)
-    val buildItemService: Reader[ItemServiceConfig, ItemService] = Reader.access(ItemService.fromConfig)
+  val buildCustomerService: Reader[CustomerServiceConfig, CustomerService] = Reader.access(CustomerService.fromConfig)
+  val buildItemService: Reader[ItemServiceConfig, ItemService] = Reader.access(ItemService.fromConfig)
 
-    val program: Reader[GlobalConfig, (Customer, Item)] = for {
-      customerService <- buildCustomerService.provideSome[GlobalConfig](_.customerServiceConfig)
-      itemService <- buildItemService.provideSome[GlobalConfig](_.itemServiceConfig)
+  val program: Reader[GlobalConfig, (Customer, Item)] = for {
+    customerService <- buildCustomerService.provideSome[GlobalConfig](_.customerServiceConfig)
+    itemService <- buildItemService.provideSome[GlobalConfig](_.itemServiceConfig)
 
-      customer = customerService.find(1)
-      item = itemService.find(1)
-    } yield (customer, item)
+    customer = customerService.find(1)
+    item = itemService.find(1)
+  } yield (customer, item)
 
+  def main(args: Array[String]): Unit = {
     val customerAndItem: (Customer, Item) = program.run(globalConfig)
     println(customerAndItem)
   }

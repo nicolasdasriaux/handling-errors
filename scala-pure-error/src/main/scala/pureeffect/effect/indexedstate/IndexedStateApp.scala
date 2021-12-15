@@ -1,26 +1,43 @@
 package pureeffect.effect.indexedstate
 
-sealed trait BoxState extends Product with Serializable
+sealed trait Lock extends Product with Serializable
 
-object BoxState {
-  final case object Open extends BoxState
-  final case object Closed extends BoxState
+object Lock {
+  final case object Open extends Lock
+  final case object Closed extends Lock
+}
 
-  val open: IndexedState[Closed.type, Open.type, Unit] = IndexedState.modify[Closed.type, Open.type](_ => Open)
-  val close: IndexedState[Open.type, Closed.type, Unit] = IndexedState.modify[Open.type, Closed.type](_ => Closed)
+case class Safe[L <: Lock] private(lock: L, openingCount: Int)
+
+object Safe {
+  import Lock._
+
+  def initial: Safe[Closed.type] = Safe(lock = Closed, openingCount = 0)
+
+  val open: IndexedState[Safe[Closed.type], Safe[Open.type], Unit] =
+    IndexedState.modify { safe =>
+      safe.copy(
+        lock = Open,
+        openingCount = safe.openingCount + 1
+      )
+    }
+
+  val close: IndexedState[Safe[Open.type], Safe[Closed.type], Unit] =
+    IndexedState.modify { safe => safe.copy(lock = Closed) }
 }
 
 object IndexedStateApp {
-  import BoxState._
+  import Lock._
 
   def main(args: Array[String]): Unit = {
-    val program: IndexedState[Closed.type, Open.type, Boolean] = for {
-      _ <- BoxState.open
-      - <- BoxState.close
-      - <- BoxState.open
-      state <- IndexedState.get
-    } yield state == BoxState.Open
+    val program: IndexedState[Safe[Closed.type], Safe[Open.type], Int] = for {
+      _ <- Safe.open
+      - <- Safe.close
+      - <- Safe.open
+      safe <- IndexedState.get
+    } yield safe.openingCount
 
-    println(program.run(BoxState.Closed))
+    val safeAndOpeningCount: (Safe[Open.type], Int) = program.run(Safe.initial)
+    println(safeAndOpeningCount)
   }
 }

@@ -9,12 +9,12 @@ object console {
 
 object IOApp {
   def main(args: Array[String]): Unit = {
-    val program = for {
+    val program: IO[Unit] = for {
       _ <- console.putStrLn("What's your name?")
       name <- console.getStrLn
       _ <- console.putStrLn(s"Hello $name!")
     } yield ()
 
-    program.unsafeRun()
+    val result: Unit = program.unsafeRun()
   }
 }

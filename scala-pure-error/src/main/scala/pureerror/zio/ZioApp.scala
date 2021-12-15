@@ -61,6 +61,14 @@ object ZioApp extends App {
     } yield s
 
     val executor = Executors.newScheduledThreadPool(5)
-    ???
+
+    (
+      for {
+        cause <- IO.fail("Hello").validate(IO.fail("Goodbye")).mapErrorCause(_.untraced).run
+        _ <- console.putStrLn(cause.toString)
+        cause2 <- IO.fail("Hello").orElse(IO.fail("Goodbye")).mapErrorCause(_.untraced).run
+        _ <- console.putStrLn(cause2.toString)
+      } yield cause
+    ).untraced.exitCode
   }
 }

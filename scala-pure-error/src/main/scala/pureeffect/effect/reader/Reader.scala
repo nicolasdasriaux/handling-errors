@@ -16,9 +16,6 @@ case class Reader[-R, +A] private (private val _run: R => A) { pa =>
     b
   }
 
-  /**
-   * contramapEnvironment
-   */
   def provideSome[RR](f: RR => R): Reader[RR, A] = Reader { rr =>
     val r: R = f(rr)
     val a: A = pa.run(r)

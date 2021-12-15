@@ -21,8 +21,7 @@ object Option {
   def some[A](a: A): Option[A] = Some(a)
   val none: Option[Nothing] = None
 
-  def succeed[A](a: A): Option[A] = some(a)
-  val fail: Option[Nothing] = none
+  def empty[A]: Option[A] = None
 
   def fromEither[A](value: Either[_, A]): Option[A] = value match {
     case Right(a) => Some(a)

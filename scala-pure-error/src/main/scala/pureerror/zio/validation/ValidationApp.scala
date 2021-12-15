@@ -1,7 +1,7 @@
-package pureerror.validation
+package pureerror.zio.validation
 
 import zio.prelude._
-import pureerror.eitherext.EitherExtension._
+import pureerror.eitherext.ZEither._
 import zio.console.Console
 import zio.{Cause => _, _}
 
@@ -14,7 +14,7 @@ object Field {
 
 object IntField {
   def parse(field: String): Either[String, Int] =
-    Either.apply(field.toInt).refineToOrDie[NumberFormatException].mapError(_ => s"invalid integer format ($field)")
+    Either.attempt(field.toInt).refineToOrDie[NumberFormatException].mapError(_ => s"invalid integer format ($field)")
 
   def parse(field: Option[String]): Either[String, Int] = Field.parse(field).flatMap(parse)
 }

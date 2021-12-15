@@ -12,9 +12,9 @@ lazy val root = (project in file("."))
       "org.typelevel" %% "cats-core" % "2.3.1",
       "org.typelevel" %% "cats-effect" % "2.3.1",
 
-      "dev.zio" %% "zio" % "1.0.5",
-      "dev.zio" %% "zio-streams" % "1.0.5",
-      "dev.zio" %% "zio-prelude" % "1.0.0-RC3+16-936a5218-SNAPSHOT",
+      "dev.zio" %% "zio" % "1.0.9",
+      "dev.zio" %% "zio-streams" % "1.0.9",
+      "dev.zio" %% "zio-prelude" % "1.0.0-RC5",
 
       "org.scalactic" %% "scalactic" % "3.0.8" % Test,
       "org.scalatest" %% "scalatest" % "3.0.8" % Test

@@ -17,10 +17,11 @@ object EitherApp {
     if (i != 0) Either.succeed(1.0 / i) else Either.fail(DivisionByZero)
   }
 
-  def program(input: String): Either[Error, (Int, Double)] = for {
-    number <- parseInt(input)
-    inverseNumber <- inverse(number)
-  } yield (number, inverseNumber)
+  def program(input: String): Either[Error, (Int, Double)] =
+    for {
+      number <- parseInt(input)
+      inverseNumber <- inverse(number)
+    } yield (number, inverseNumber)
 
   def main(args: Array[String]): Unit = {
     val attemptedResult: Either[Error, (Int, Double)] = program("0")

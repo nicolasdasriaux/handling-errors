@@ -2,10 +2,10 @@ package pureerror.eitherext
 
 import java.io.IOException
 
-import EitherExtension._
+import ZEither._
 import org.scalatest.{EitherValues, FunSpec, Matchers}
 
-class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
+class ZEitherTest extends FunSpec with Matchers with EitherValues {
   describe("Either Extension") {
     it("succeed") {
       Either.succeed(1) should be(Right(1))
@@ -41,12 +41,12 @@ class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
 
     describe("attempt") {
       it("success") {
-        val either = Either("1".toInt)
+        val either = Either.attempt("1".toInt)
         either.right.value should be(1)
       }
 
       it("failure") {
-        val either = Either("abc".toInt)
+        val either = Either.attempt("abc".toInt)
         either.left.value should be(a[NumberFormatException])
         either.left.value should have message """For input string: "abc""""
       }
@@ -83,10 +83,10 @@ class EitherExtensionTest extends FunSpec with Matchers with EitherValues {
     }
 
     it("orElse") {
-      val value1 = Either("abc".toInt)
+      val value1 = Either.attempt("abc".toInt)
       value1.left.value should be (a[NumberFormatException])
       value1.left.value should have message("""For input string: "abc"""")
-      val value2 = Either("abc".toInt).refineToOrDie[NumberFormatException]
+      val value2 = Either.attempt("abc".toInt).refineToOrDie[NumberFormatException]
       value2.mapError(_.getMessage) should be(Left("""For input string: "abc"""".stripMargin))
     }
   }

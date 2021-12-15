@@ -28,5 +28,6 @@ case class IO[+A] private (private val _unsafeRun: () => A) { pa =>
 
 object IO {
   def succeed[A](a: A): IO[A] = IO(() => a)
+
   def effectTotal[A](a: => A): IO[A] = IO(() => a)
 }
